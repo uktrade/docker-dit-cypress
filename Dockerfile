@@ -1,9 +1,11 @@
 FROM node:8.11.3
 
+ENV DOCKERIZE_VERSION v0.3.0
+
 RUN apt-get update
 
+# Install cypress dependencies
 RUN apt-get install xvfb -y \
-    redis-server \
     libgtk2.0-0 \
     libasound2 \
     libatk1.0-0 \
@@ -34,5 +36,22 @@ RUN apt-get install xvfb -y \
     libxrender1 \
     libxss1 \
     libxtst6 \
-    libnss3 \
-    git
+    libnss3
+
+# Install git so we don't depend on the outdated CircleCI git
+RUN apt-get install git -y
+
+# Install dependencies for dockerise
+RUN apt-get install -y curl \
+    wget \
+    libssl-dev \
+    libpng-dev \
+    libgconf-2-4 \
+    libxss1 \
+    libappindicator1 \
+    libindicator7 \
+    fonts-liberation
+
+# Install dockerise
+RUN wget https://github.com/jwilder/dockerize/releases/download/$DOCKERIZE_VERSION/dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz
+RUN tar -C /usr/local/bin -xzvf dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz && rm dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz
