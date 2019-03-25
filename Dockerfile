@@ -1,4 +1,4 @@
-FROM node:8.11.3
+FROM node:8.15.1
 
 ENV DOCKERIZE_VERSION v0.3.0
 
