@@ -1,11 +1,14 @@
 FROM node:8.15.1
 
 ENV DOCKERIZE_VERSION v0.3.0
+ENV YARN_VERSION      1.15.2
+ENV TZ                "Europe/London"
 
 RUN apt-get update
 
 # Install cypress dependencies
 RUN apt-get install xvfb -y \
+	tzdata \
     libgtk2.0-0 \
     libasound2 \
     libatk1.0-0 \
@@ -37,6 +40,13 @@ RUN apt-get install xvfb -y \
     libxss1 \
     libxtst6 \
     libnss3
+
+# Set timezone
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone \
+  && echo "Timezone: $(date +%z)"
+
+# Use specific yarn version
+RUN npm install -g yarn@$YARN_VERSION
 
 # Install git so we don't depend on the outdated CircleCI git
 RUN apt-get install git -y
